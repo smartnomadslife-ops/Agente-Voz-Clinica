@@ -1,0 +1,32 @@
+# Dependencias
+node_modules/
+.pnpm-store/
+
+# Next.js
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# Secretos: nunca deben salir del entorno local.
+# `.env*` en lugar de `.env` + `.env.*` porque el segundo patrón exige un punto
+# tras "env" y dejaba pasar variantes mal escritas como ".env local".
+.env*
+!.env.example
+
+# Supabase (contiene claves locales generadas)
+supabase/.temp/
+supabase/.branches/
+
+# Vercel
+.vercel/
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Claude Code: los ajustes locales no se comparten (las skills sí se versionan)
+.claude/settings.local.json

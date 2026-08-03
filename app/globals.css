@@ -1,0 +1,112 @@
+@import 'tailwindcss';
+
+/* =============================================================================
+   Porcelana y tinta
+   -----------------------------------------------------------------------------
+   Un solo color saturado en toda la aplicación: el índigo del agente. Significa
+   siempre lo mismo — «esto lo hizo el asistente» — y por eso no se usa nunca
+   como adorno. En el calendario separa las citas que agendó el agente de los
+   eventos creados a mano en Google; en las transcripciones marca sus turnos.
+   Todo lo demás se mantiene en porcelana, tinta y grises cálidos para que ese
+   índigo sea siempre lo más audible de la pantalla.
+
+   Interfaz clara únicamente, por decisión: es software de trastienda clínica que
+   se usa con luz de consulta.
+   ========================================================================== */
+
+@theme {
+  /* --- Superficies ------------------------------------------------------- */
+  --color-paper: #f7f6f3;
+  --color-surface: #ffffff;
+  --color-sunken: #f0eeea;
+
+  /* --- Tinta ------------------------------------------------------------- */
+  --color-ink: #16181d;
+  --color-ink-soft: #5b6068;
+  --color-ink-faint: #8d9199;
+
+  /* --- El agente --------------------------------------------------------- */
+  --color-agent: #4638e8;
+  --color-agent-soft: #ece9ff;
+  --color-agent-line: #c7bffb;
+
+  /* --- Trazos ------------------------------------------------------------ */
+  --color-line: #e3e1dc;
+  --color-line-strong: #d1cec7;
+
+  /* --- Estados (desaturados para no competir con el índigo) --------------- */
+  --color-ok: #2f7d63;
+  --color-ok-soft: #e6f1ec;
+  --color-warn: #a86a1f;
+  --color-warn-soft: #f8efdf;
+  --color-alert: #b3372e;
+  --color-alert-soft: #fbeae8;
+
+  /* --- Tipografía -------------------------------------------------------- */
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+  --radius-card: 0.625rem;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  /* Las cifras se alinean en columna en métricas, horas y duraciones. */
+  .tabular {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Foco visible y consistente en todo lo interactivo. */
+  :focus-visible {
+    outline: 2px solid var(--color-agent);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  ::selection {
+    background-color: var(--color-agent-soft);
+  }
+}
+
+@layer utilities {
+  /* Etiqueta de sección: versalitas espaciadas, el único recurso decorativo
+     que se permite, y solo para encabezar bloques de datos. */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-ink-faint);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,7 @@
+# pnpm 11 dejó de leer el campo "pnpm" de package.json; los ajustes viven aquí.
+# Ambos paquetes compilan binarios nativos y necesitan ejecutar su script de
+# instalación: ESLint usa unrs-resolver para resolver imports de TypeScript,
+# y sharp optimiza imágenes en producción.
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
