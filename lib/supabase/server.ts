@@ -13,8 +13,16 @@ import type { Database } from '@/lib/types/database';
  * En Next.js 16 `cookies()` es asíncrona, de ahí que la función lo sea.
  */
 export async function createClient() {
-  const { url, anonKey } = requireSupabasePublicEnv();
+  // `cookies()` va PRIMERO a propósito, antes de validar el entorno.
+  //
+  // Durante `next build`, Next ejecuta cada página para averiguar si puede
+  // prerenderizarla, y es esta llamada la que lanza la señal de «ruta dinámica»
+  // que hace que se la salte. Si la comprobación de entorno lanzara antes, Next
+  // lo tomaría por un fallo real de prerenderizado y abortaría el build, lo que
+  // obligaría a tener las credenciales de producción disponibles solo para
+  // compilar. No inviertas este orden.
   const cookieStore = await cookies();
+  const { url, anonKey } = requireSupabasePublicEnv();
 
   return createServerClient<Database>(url, anonKey, {
     cookies: {

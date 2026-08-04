@@ -199,16 +199,43 @@ curl -s -X POST http://localhost:3000/api/vapi/webhook \
 
 ## Despliegue en Vercel
 
-1. Importa el repositorio en Vercel.
-2. Añade todas las variables de `.env.example` en **Settings → Environment
-   Variables**. `APP_URL` debe ser el dominio de producción, sin barra final.
-3. Añade `https://tu-dominio.com/api/google/callback` como redirect URI en Google
-   Cloud. Si vas a usar los *Preview Deployments*, añade también sus URLs.
-4. Tras el despliegue, entra en **Personalización** y pulsa **Publicar** para que
-   el asistente apunte al `server.url` de producción.
+1. Importa el repositorio en Vercel. Detecta Next.js y pnpm solo; no hay que tocar
+   el *build command* ni el *output directory*.
+
+2. **Antes de desplegar**, añade en **Settings → Environment Variables** (entorno
+   *Production*) todas las variables de `.env.example` salvo `APP_URL` y
+   `GOOGLE_REDIRECT_URI`, que todavía no puedes conocer.
+
+   `ENCRYPTION_KEY` debe ser **exactamente la misma** que usas en local: si generas
+   una nueva, los tokens de Google ya guardados dejan de poder descifrarse y las
+   clínicas tendrán que reconectar el calendario.
+
+3. Despliega, copia el dominio que te asigne Vercel y rellena entonces:
+   - `APP_URL` = `https://tu-dominio.com` (sin barra final)
+   - `GOOGLE_REDIRECT_URI` = `https://tu-dominio.com/api/google/callback`
+
+4. **Vuelve a desplegar.** Las variables de entorno no surten efecto hasta el
+   siguiente build.
+
+5. Añade esa misma redirect URI en Google Cloud, carácter por carácter, o el flujo
+   de OAuth fallará con `redirect_uri_mismatch`.
+
+6. Entra en **Personalización** y pulsa **Publicar**, para que el `server.url` del
+   asistente deje de apuntar a la URL de ngrok y pase al dominio de producción.
 
 El webhook declara `maxDuration = 60`, suficiente para consultar Google y
 escribir en Supabase dentro de una llamada.
+
+**Sobre los *Preview Deployments*:** cada rama recibe un dominio distinto que no
+estará autorizado en Google Cloud ni será el `server.url` del asistente. El OAuth
+de Google y las llamadas de Vapi solo funcionarán en producción, salvo que añadas
+también esas URLs.
+
+> El build **no** necesita ninguna variable de entorno: las páginas del panel son
+> dinámicas y no se prerenderizan. Si un build falla con «Faltan variables de
+> entorno» durante el prerenderizado, es que se ha roto el orden de
+> `lib/supabase/server.ts`, donde `cookies()` debe llamarse antes de validar el
+> entorno.
 
 ---
 
